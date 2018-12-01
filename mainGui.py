@@ -123,7 +123,7 @@ class mainScreen:
             return False
 
 
-    def click(self, width, height):
+    def leftClick(self, width, height):
         if(self.isHoveringEZButton(width, height)):
             print('Easy Button Pressed')
             self.changeState = self.ezTXT

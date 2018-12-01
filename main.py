@@ -6,14 +6,15 @@ from easyScreen import *
 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 
 pygame.font.init()
-pygame.display.set_caption('Zech\'s Minesweeper')
+pygame.display.set_caption('Minesweeper')
 
 pygame.display.update()
 mainScreen = mainScreen(screen)
-easyScreen = easyScreen(screen)
+easyScreen = easyScreen(screen, width, height)
 
-#currScreen = mainScreen
-currScreen = easyScreen
+# Currently for building and testing I am just skipping straight to the screen for the easy game!
+currScreen = mainScreen
+#currScreen = easyScreen
 
 running = True
 while running:
@@ -26,8 +27,11 @@ while running:
 			height = event.h
 			screen = pygame.display.set_mode(scrsize,pygame.RESIZABLE)
 			changed = True
-		elif event.type == pygame.MOUSEBUTTONUP:
-			currScreen.click(width, height)
+		elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+			currScreen.leftClick(width, height)
+		elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:
+			if(currScreen != mainScreen):
+				currScreen.rightClick(width, height)
 
 	currScreen.load(width, height)
 	if(currScreen.getChangeState() == "EASY"):

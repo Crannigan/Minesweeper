@@ -3,14 +3,15 @@ from gameState import *
 
 class easyScreen:
 	changeState = "GAME"
-	def __init__(self, screen):
+	def __init__(self, screen, width, height):
 		self.screen = screen
 		self.silver = (192,192,192)
 		self.gray = (128,128,128)
 		self.red = (255,0,0)
 		self.numXPieces = 8
 		self.numYPieces = 8
-		self.gameState = gameState(self.screen, self.numXPieces, self.numYPieces)
+		self.bombNum = 10
+		self.gameState = gameState(self.screen, self.numXPieces, self.numYPieces, width, height, self.bombNum)
 
 	def load(self, width, height):
 		self.draw(width, height)
@@ -23,5 +24,8 @@ class easyScreen:
 	def getChangeState(self):
 		return self.changeState
 
-	def click(self, width, height):
-		print ("Click!")
+	def leftClick(self, width, height):
+		self.gameState.leftClick(width, height)
+
+	def rightClick(self, width, height):
+		self.gameState.rightClick(width, height)
