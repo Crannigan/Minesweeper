@@ -11,10 +11,9 @@ class mainScreen:
         self.buttonColorFair = self.gray
         self.buttonColorHard = self.gray
 
-        self.startTXT = "START"
-        self.ezTXT = "EASY"
-        self.fairTXT = "FAIR"
-        self.hardTXT = "HARD"
+        self.easyText = "EASY"
+        self.fairText = "FAIR"
+        self.hardText = "HARD"
 
     def load(self, width, height):
         self.rectWidth = (width // 3)
@@ -126,13 +125,13 @@ class mainScreen:
     def leftClick(self, width, height):
         if(self.isHoveringEZButton(width, height)):
             print('Easy Button Pressed')
-            self.changeState = self.ezTXT
+            self.changeState = self.easyText
         elif(self.isHoveringFairButton(width, height)):
             print('Fair Button Pressed')
-            self.changeState = self.fairTXT
+            self.changeState = self.fairText
         elif(self.isHoveringHardButton(width, height)):
             print('Hard Button Pressed')
-            self.changeState = self.hardTXT
+            self.changeState = self.hardText
 
     def getChangeState(self):
         return self.changeState

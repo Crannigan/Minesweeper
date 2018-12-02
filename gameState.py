@@ -5,7 +5,6 @@ from tile import *
 
 class gameState:
 	xRow = 0
-	yRow = 0
 	lost = False
 	builtBombs = False
 	mainIMG = "images/smile.png"
@@ -17,6 +16,8 @@ class gameState:
 		self.numXPieces = numXPieces
 		self.numYPieces = numYPieces
 		self.bombNum = bombNum
+
+	def make(self, width, height):
 		self.buildTiles(width, height)
 
 	def draw(self, width, height):
@@ -39,13 +40,15 @@ class gameState:
 
 
 	def buildTiles(self, width, height):
+		offset = (width - ((width // self.numXPieces) * self.numXPieces)) // 2
+
 		self.xRow = list()
 		for i in range(1, self.numXPieces + 1):
 			yRow = list()
 			for y in range(1, self.numYPieces + 1):
 				tileWidth = width // self.numXPieces
 				tileHeight = (height - (width // 7)) // self.numYPieces
-				tileX = (i - 1) * tileWidth
+				tileX = ((i - 1) * tileWidth) + offset
 				tileY = ((y - 1) * tileHeight) + (width // 7)
 				thisTile = tile(tileX, tileY, tileWidth, tileHeight, self.screen)
 				yRow.append(thisTile)
@@ -56,6 +59,23 @@ class gameState:
 
 	def leftClick(self, width, height):
 		mouseX, mouseY = pygame.mouse.get_pos()
+
+		#test if reset
+		leftx = ((self.rectWidth // 2) - (int(self.rectHeight * 0.8) // 2))
+		rightx = leftx + self.img.get_width()
+		topy = (self.rectHeight - int(self.rectHeight * 0.8)) // 2
+		boty = topy + self.img.get_height()
+		if(mouseX > leftx and mouseX < rightx):
+			if(mouseY > topy and mouseY < boty):
+				self.mainIMG = "images/smile.png"
+				self.lost = False
+				self.builtBombs = False
+				self.buildTiles(width, height)
+
+		if(mouseY < self.rectHeight):
+			return
+
+
 		tileXNum = mouseX // (width // self.numXPieces)
 		tileYNum = (mouseY - (width // 7)) // ((height - (width // 7)) // self.numYPieces)
 		self.detBombCalcNear(width, height)
@@ -63,10 +83,10 @@ class gameState:
 			if(self.xRow[tileXNum][tileYNum].getNumNearBombs() == 0):
 				self.recClick(tileXNum, tileYNum)
 			else:
-				isBomb = self.xRow[tileXNum][tileYNum].clickedTile()
-		
+				isBomb = self.xRow[tileXNum][tileYNum].bust()
 				if (isBomb):
-					self.lostGame()	
+					self.lostGame()
+
 			
 
 	def rightClick(self, width, height):
@@ -121,11 +141,19 @@ class gameState:
 
 
 	def printTiles(self, width, height):
+		tilesWidth = (width // self.numXPieces) * self.numXPieces
+		tilesHeight = ((height - (width // 7)) // self.numYPieces) * self.numYPieces
+		tilesBGx = (width - (tilesWidth + 6)) // 2
+		tilesBGy = (width // 7) - 3
+		tilesWidth = tilesWidth + tilesBGx + (6 - tilesBGx)
+		tilesHeight = tilesHeight + (6 - tilesBGy) + tilesBGy
+		tileBG = pygame.draw.rect(self.screen, self.black,(tilesBGx,tilesBGy,tilesWidth,tilesHeight))
+		offset = (width - ((width // self.numXPieces) * self.numXPieces)) // 2
 		for i in range(self.numXPieces):
 			for y in range(self.numYPieces):
 				tileWidth = width // self.numXPieces
 				tileHeight = (height - (width // 7)) // self.numYPieces
-				tileX = i * tileWidth
+				tileX = (i * tileWidth) + offset
 				tileY = (y * tileHeight) + (width // 7)
 				tempTile = self.xRow[i][y].updateAndPrint(tileX, tileY, tileWidth, tileHeight)
 				self.xRow[i][y] = tempTile
@@ -192,8 +220,8 @@ class gameState:
 					if(self.xRow[i + 1][k + 1].isBomb()):
 						total += 1
 
-
 				self.xRow[i][k].setNearBombs(total)
+
 
 	def correct(self, x_val, y_val):
 		if(x_val < 0):

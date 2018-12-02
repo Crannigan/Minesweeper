@@ -1,6 +1,6 @@
 import pygame
 from mainGui import *
-from easyScreen import *
+from screen import *
 
 (width, height) = (750,750)
 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
@@ -11,10 +11,10 @@ pygame.display.set_caption('Minesweeper')
 pygame.display.update()
 mainScreen = mainScreen(screen)
 easyScreen = easyScreen(screen, width, height)
+fairScreen = fairScreen(screen, width, height)
+hardScreen = hardScreen(screen, width, height)
 
-# Currently for building and testing I am just skipping straight to the screen for the easy game!
 currScreen = mainScreen
-#currScreen = easyScreen
 
 running = True
 while running:
@@ -33,9 +33,17 @@ while running:
 			if(currScreen != mainScreen):
 				currScreen.rightClick(width, height)
 
-	currScreen.load(width, height)
+	
 	if(currScreen.getChangeState() == "EASY"):
 		currScreen = easyScreen
-		currScreen.load(width, height)
+		currScreen.make(width, height)
+	elif(currScreen.getChangeState() == "FAIR"):
+		currScreen = fairScreen
+		currScreen.make(width, height)
+	elif(currScreen.getChangeState() == "HARD"):
+		currScreen = hardScreen
+		currScreen.make(width, height)
+	
+	currScreen.load(width, height)
 
 	pygame.display.update()
