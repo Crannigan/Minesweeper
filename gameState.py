@@ -148,7 +148,9 @@ class gameState:
 		tilesWidth = tilesWidth + tilesBGx + (6 - tilesBGx)
 		tilesHeight = tilesHeight + (6 - tilesBGy) + tilesBGy
 		tileBG = pygame.draw.rect(self.screen, self.black,(tilesBGx,tilesBGy,tilesWidth,tilesHeight))
+
 		offset = (width - ((width // self.numXPieces) * self.numXPieces)) // 2
+
 		for i in range(self.numXPieces):
 			for y in range(self.numYPieces):
 				tileWidth = width // self.numXPieces
