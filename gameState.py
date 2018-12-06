@@ -87,6 +87,9 @@ class gameState:
 				if (isBomb):
 					self.lostGame()
 
+		if self.didWin():
+			self.mainIMG = "images/cool.png"
+
 			
 
 	def rightClick(self, width, height):
@@ -98,6 +101,10 @@ class gameState:
 
 		if not(self.lost):
 			self.xRow[tileXNum][tileYNum].placeFlag()
+
+
+		if self.didWin():
+			self.mainIMG = "images/cool.png"
 
 
 	def detBombCalcNear(self, width, height):
@@ -114,6 +121,7 @@ class gameState:
 					checkBomb = self.xRow[tempRandX][tempRandY].addBomb()
 					if (checkBomb):
 						i = i + 1
+						print(tempRandX, tempRandY)
 			self.builtBombs = True
 			self.calculateNearBombs()
 
@@ -235,5 +243,15 @@ class gameState:
 			return False
 		elif(y_val > (self.numYPieces - 1)):
 			return False
+
+		return True
+
+
+	def didWin(self):
+		for i in range(self.numXPieces):
+			for k in range(self.numYPieces):
+				if not self.xRow[i][k].guessRight():
+					return False
+
 
 		return True

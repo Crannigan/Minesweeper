@@ -121,3 +121,10 @@ class tile:
 		else:
 			return False
 		
+	def guessRight(self):
+		if self.clicked and (not self.isBombId):
+			return True
+		elif (not self.clicked) and self.isFlag and self.isBombId:
+			return True
+		else:
+			return False
