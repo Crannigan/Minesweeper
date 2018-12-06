@@ -76,7 +76,12 @@ class tile:
 
 	def placeFlag(self):
 		if not(self.clicked):
+			temp = self.isFlag
 			self.isFlag = (not self.isFlag)
+			if temp:
+				return False
+			else:
+				return True
 
 
 	def addClickedAction(self):

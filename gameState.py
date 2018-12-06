@@ -16,6 +16,7 @@ class gameState:
 		self.numXPieces = numXPieces
 		self.numYPieces = numYPieces
 		self.bombNum = bombNum
+		self.flagsAvailable = self.bombNum
 
 	def make(self, width, height):
 		self.buildTiles(width, height)
@@ -23,6 +24,30 @@ class gameState:
 	def draw(self, width, height):
 		self.buildHeader(width, height)
 		self.printTiles(width, height)
+		self.printFlagCount(width, height)
+
+
+	def printFlagCount(self, width, height):
+		self.flagCounterTextTop = pygame.font.SysFont('Comic Sans MS', (width // 7) // 4)
+		textsurfaceTop = self.flagCounterTextTop.render('Flag', False, (0, 0, 0))
+		
+		self.flagCounterTextBot = pygame.font.SysFont('Comic Sans MS', (width // 7) // 4)
+		textsurfaceBot = self.flagCounterTextBot.render('Counter', False, (0, 0, 0))
+
+		offset = ((width // 7) - (textsurfaceTop.get_height() + textsurfaceBot.get_height())) // 2
+		self.screen.blit(textsurfaceTop,(0,offset))
+		self.screen.blit(textsurfaceBot,(0,offset + textsurfaceTop.get_height()))
+
+		rectSide = (width // 7) * 0.8
+		rectX = textsurfaceBot.get_width() + 15
+		rextY = ((width // 7) - rectSide) // 2
+
+		self.flagCounterBG = pygame.draw.rect(self.screen, self.black, (rectX,rextY,rectSide,rectSide))
+
+		self.countText = pygame.font.SysFont('Comic Sans MS', (width // 7) // 2)
+		flagCounterTXT = self.countText.render(str(self.flagsAvailable), False, (255,255,255))
+		self.screen.blit(flagCounterTXT, (rectX + ((rectSide - flagCounterTXT.get_width()) // 2),rextY))
+
 
 
 	def buildHeader(self, width, height):
@@ -71,13 +96,18 @@ class gameState:
 				self.lost = False
 				self.builtBombs = False
 				self.buildTiles(width, height)
-
-		if(mouseY < self.rectHeight):
-			return
+				self.flagsAvailable = self.bombNum
 
 
 		tileXNum = mouseX // (width // self.numXPieces)
 		tileYNum = (mouseY - (width // 7)) // ((height - (width // 7)) // self.numYPieces)
+
+
+		if tileXNum >= self.numXPieces:
+			return
+		elif tileYNum < 0 or tileYNum >= self.numYPieces:
+			return
+
 		self.detBombCalcNear(width, height)
 		if not(self.lost):
 			if(self.xRow[tileXNum][tileYNum].getNumNearBombs() == 0):
@@ -97,10 +127,19 @@ class gameState:
 		tileXNum = mouseX // (width // self.numXPieces)
 		tileYNum = (mouseY - (width // 7)) // ((height - (width // 7)) // self.numYPieces)
 
+		if tileXNum >= self.numXPieces:
+			return
+		elif tileYNum < 0 or tileYNum >= self.numYPieces:
+			return
+
 		self.detBombCalcNear(width, height)
 
 		if not(self.lost):
-			self.xRow[tileXNum][tileYNum].placeFlag()
+			placedFlag = self.xRow[tileXNum][tileYNum].placeFlag()
+			if placedFlag and self.flagsAvailable != 0:
+				self.flagsAvailable -= 1
+			elif not placedFlag:
+				self.flagsAvailable += 1
 
 
 		if self.didWin():
@@ -121,7 +160,6 @@ class gameState:
 					checkBomb = self.xRow[tempRandX][tempRandY].addBomb()
 					if (checkBomb):
 						i = i + 1
-						print(tempRandX, tempRandY)
 			self.builtBombs = True
 			self.calculateNearBombs()
 
