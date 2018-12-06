@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 
 from tile import *
 
@@ -8,6 +9,9 @@ class gameState:
 	lost = False
 	builtBombs = False
 	mainIMG = "images/smile.png"
+	startTime = 0
+	updateTime = True
+	endTime = 0
 	def __init__(self, screen, numXPieces, numYPieces, width, height, bombNum):
 		self.screen = screen
 		self.gray = (128,128,128)
@@ -25,6 +29,26 @@ class gameState:
 		self.buildHeader(width, height)
 		self.printTiles(width, height)
 		self.printFlagCount(width, height)
+		self.drawTimer(width, height)
+
+
+	def drawTimer(self, width, height):
+		if self.updateTime:
+			self.endTime = time.time()
+
+		timeDif = (self.endTime - self.startTime) if self.startTime != 0 else 0
+		self.timerTXT = pygame.font.SysFont('Comic Sans MS', (width // 7) // 2)
+		txtSurface = self.timerTXT.render(str(int(timeDif)), False, (255,255,255))
+
+		rectX = (width // 2) + (width // 8) 
+		rectY = ((width // 7) - ((width // 7) * 0.8)) // 2
+		rectSideX = (width // 3)
+		rectSideY =  (width // 7) * 0.8
+
+		txtX = width - txtSurface.get_width() - (width - (rectX + rectSideX)) - 5
+
+		self.timerBG = pygame.draw.rect(self.screen, self.black, (rectX,rectY,rectSideX,rectSideY))
+		self.screen.blit(txtSurface, (txtX, rectY))
 
 
 	def printFlagCount(self, width, height):
@@ -97,6 +121,8 @@ class gameState:
 				self.builtBombs = False
 				self.buildTiles(width, height)
 				self.flagsAvailable = self.bombNum
+				self.startTime = 0
+				self.updateTime = True
 
 
 		tileXNum = mouseX // (width // self.numXPieces)
@@ -162,8 +188,9 @@ class gameState:
 						i = i + 1
 			self.builtBombs = True
 			self.calculateNearBombs()
+			self.startTime = time.time()
 
-		
+	
 
 
 	def recClick(self, x, y):
@@ -209,6 +236,7 @@ class gameState:
 
 	def lostGame(self):
 		self.lost = True
+		self.updateTime = False
 
 		# Draw Smiley Face
 		self.mainIMG = 'images/blech.png'
