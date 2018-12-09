@@ -23,13 +23,35 @@ class gameState:
 		self.flagsAvailable = self.bombNum
 
 	def make(self, width, height):
+		self.mainIMG = "images/smile.png"
+		self.lost = False
+		self.builtBombs = False
 		self.buildTiles(width, height)
+		self.flagsAvailable = self.bombNum
+		self.startTime = 0
+		self.updateTime = True
 
 	def draw(self, width, height):
 		self.buildHeader(width, height)
 		self.printTiles(width, height)
 		self.printFlagCount(width, height)
 		self.drawTimer(width, height)
+		self.drawHome(width, height)
+
+
+	def drawHome(self, width, height):
+		bgX = (width // 2) - (width // 5) 
+		bgY = (width // 7) // 6
+		bgWidth = (width // 8)
+		bgHeight = (width // 7) // 4
+		self.homeBut = pygame.draw.rect(self.screen, self.yellow, (bgX, bgY, bgWidth, bgHeight))
+
+		self.homeTXT = pygame.font.SysFont('Comic Sans MS', bgWidth // 5)
+		txtSurface = self.homeTXT.render("Home", False, self.black)
+
+		offset = (bgWidth - txtSurface.get_width()) // 2
+
+		self.screen.blit(txtSurface, (bgX + offset, bgY))
 
 
 	def drawTimer(self, width, height):

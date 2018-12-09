@@ -43,6 +43,9 @@ while running:
 	elif(currScreen.getChangeState() == "HARD"):
 		currScreen = hardScreen
 		currScreen.make(width, height)
+	elif(currScreen.getChangeState() == "MAIN"):
+		currScreen = mainScreen
+		currScreen.changeTheState()
 	
 	currScreen.load(width, height)
 

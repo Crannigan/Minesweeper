@@ -24,12 +24,25 @@ class easyScreen:
 		return self.changeState
 
 	def leftClick(self, width, height):
+		mouseX, mouseY = pygame.mouse.get_pos()
+		#test if go home/main
+		leftx = (width // 2) - (width // 5) 
+		topy = (width // 7) // 6
+		rightx = ((width // 8)) + leftx
+		botY = ((width // 7) // 4) + topy
+
+		if mouseX < rightx and mouseX > leftx:
+			if mouseY < botY and mouseY > topy:
+				self.changeState = "MAIN"
+
+
 		self.gameState.leftClick(width, height)
 
 	def rightClick(self, width, height):
 		self.gameState.rightClick(width, height)
 
 	def make(self, width, height):
+		self.changeState = "GAME"
 		self.gameState.make(width, height)
 
 
@@ -57,12 +70,24 @@ class fairScreen:
 		return self.changeState
 
 	def leftClick(self, width, height):
+		mouseX, mouseY = pygame.mouse.get_pos()
+		#test if go home/main
+		leftx = (width // 2) - (width // 5) 
+		topy = (width // 7) // 6
+		rightx = ((width // 8)) + leftx
+		botY = ((width // 7) // 4) + topy
+
+		if mouseX < rightx and mouseX > leftx:
+			if mouseY < botY and mouseY > topy:
+				self.changeState = "MAIN"
+
 		self.gameState.leftClick(width, height)
 
 	def rightClick(self, width, height):
 		self.gameState.rightClick(width, height)
 
 	def make(self, width, height):
+		self.changeState = "GAME"
 		self.gameState.make(width, height)
 
 
@@ -90,10 +115,22 @@ class hardScreen:
 		return self.changeState
 
 	def leftClick(self, width, height):
+		mouseX, mouseY = pygame.mouse.get_pos()
+		#test if go home/main
+		leftx = (width // 2) - (width // 5) 
+		topy = (width // 7) // 6
+		rightx = ((width // 8)) + leftx
+		botY = ((width // 7) // 4) + topy
+
+		if mouseX < rightx and mouseX > leftx:
+			if mouseY < botY and mouseY > topy:
+				self.changeState = "MAIN"
+				
 		self.gameState.leftClick(width, height)
 
 	def rightClick(self, width, height):
 		self.gameState.rightClick(width, height)
 
 	def make(self, width, height):
+		self.changeState = "GAME"
 		self.gameState.make(width, height)

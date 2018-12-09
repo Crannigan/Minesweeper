@@ -124,14 +124,14 @@ class mainScreen:
 
     def leftClick(self, width, height):
         if(self.isHoveringEZButton(width, height)):
-            print('Easy Button Pressed')
             self.changeState = self.easyText
         elif(self.isHoveringFairButton(width, height)):
-            print('Fair Button Pressed')
             self.changeState = self.fairText
         elif(self.isHoveringHardButton(width, height)):
-            print('Hard Button Pressed')
             self.changeState = self.hardText
 
     def getChangeState(self):
         return self.changeState
+
+    def changeTheState(self):
+        self.changeState = "START"
